@@ -23,7 +23,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TOEFL ITP · TESJo Prep",
+  title: "TOEFL ITP",
   description:
     "Plataforma modular para preparar el TOEFL ITP: Structure, Written Expression y seguimiento de puntaje.",
 };

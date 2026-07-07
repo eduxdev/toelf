@@ -13,7 +13,7 @@ export function HeroSection() {
           <p className="max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
             Ejercicios reales de Structure y Written Expression, puntaje al
             momento y seguimiento de tu progreso. Todo en un solo lugar para
-            que llegues listo al examen del TESJo.
+            que llegues listo al examen.
           </p>
           <div className="flex flex-wrap gap-3">
             <ButtonLink href="/practice" size="lg">

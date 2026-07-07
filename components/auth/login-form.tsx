@@ -26,7 +26,7 @@ export function LoginForm() {
           name="email"
           type="email"
           autoComplete="email"
-          placeholder="tunombre@tesjo.edu.mx"
+          placeholder="Correo electrónico"
           required
         />
       </div>

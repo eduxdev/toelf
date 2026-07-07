@@ -5,6 +5,7 @@ import { ButtonLink } from "@/components/ui/button-link";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -65,21 +66,27 @@ export async function UserMenu() {
         }
       />
       <DropdownMenuContent align="end" className="min-w-52">
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col">
-            <span className="font-medium">{displayName}</span>
-            <span className="text-xs text-muted-foreground">{user.email}</span>
-          </div>
-        </DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="font-normal">
+            <div className="flex flex-col">
+              <span className="font-medium">{displayName}</span>
+              <span className="text-xs text-muted-foreground">
+                {user.email}
+              </span>
+            </div>
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem render={<Link href="/profile" />}>
-          <ChartLineUp />
-          Mi perfil
-        </DropdownMenuItem>
-        <DropdownMenuItem render={<Link href="/practice" />}>
-          <User />
-          Practicar
-        </DropdownMenuItem>
+        <DropdownMenuGroup>
+          <DropdownMenuItem render={<Link href="/profile" />}>
+            <ChartLineUp />
+            Mi perfil
+          </DropdownMenuItem>
+          <DropdownMenuItem render={<Link href="/practice" />}>
+            <User />
+            Practicar
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <form action={logoutAction}>
           <button

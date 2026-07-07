@@ -27,7 +27,7 @@ export function AuthShell({
         <span className="grid size-7 place-items-center border border-foreground bg-foreground text-background">
           <GraduationCap weight="bold" className="size-4" />
         </span>
-        <span className="font-semibold tracking-tight">TOEFL ITP · TESJo</span>
+        <span className="font-semibold tracking-tight">TOEFL ITP</span>
       </Link>
       <div className="border border-border bg-background p-6">
         <div className="mb-6 space-y-1">

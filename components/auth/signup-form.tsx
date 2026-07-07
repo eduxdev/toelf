@@ -26,13 +26,13 @@ export function SignupForm() {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="email">Correo institucional</Label>
+        <Label htmlFor="email">Correo</Label>
         <Input
           id="email"
           name="email"
           type="email"
           autoComplete="email"
-          placeholder="tunombre@tesjo.edu.mx"
+          placeholder="Correo electrónico"
           required
         />
       </div>

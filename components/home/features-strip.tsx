@@ -10,7 +10,7 @@ const FEATURES = [
     icon: Books,
     title: "Preguntas reales",
     description:
-      "Banco tomado del material que trabajan en TESJo, listo para practicar.",
+      "Banco tomado del material usando recientemente, listo para practicar.",
   },
   {
     icon: Timer,
