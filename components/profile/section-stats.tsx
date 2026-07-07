@@ -1,21 +1,22 @@
-"use client";
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { SECTIONS } from "@/lib/data/sections";
-import type { PracticeSessionSummary } from "@/lib/types/practice";
+import type {
+  PracticeSessionSummary,
+  SectionMeta,
+} from "@/lib/types/practice";
 
 interface SectionStatsProps {
+  sections: SectionMeta[];
   sessions: PracticeSessionSummary[];
 }
 
 /**
  * Aggregate stats per section (attempts, average and best scores).
  */
-export function SectionStats({ sessions }: SectionStatsProps) {
+export function SectionStats({ sections, sessions }: SectionStatsProps) {
   return (
     <div className="grid gap-4 md:grid-cols-2">
-      {SECTIONS.map((section) => {
+      {sections.map((section) => {
         const sectionSessions = sessions.filter(
           (s) => s.sectionId === section.id
         );

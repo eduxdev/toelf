@@ -1,28 +1,30 @@
-"use client";
-
-import Link from "next/link";
-import { ArrowRight, Clock } from "@phosphor-icons/react";
+import { ArrowRight, Clock } from "@phosphor-icons/react/dist/ssr";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button-link";
 import { Separator } from "@/components/ui/separator";
 import { ScoreBadge } from "@/components/shared/score-badge";
-import { getSection } from "@/lib/data/sections";
 import { formatDuration } from "@/lib/scoring";
-import type { PracticeSessionSummary } from "@/lib/types/practice";
+import type {
+  PracticeSessionSummary,
+  SectionMeta,
+} from "@/lib/types/practice";
 
 interface RecentSessionsProps {
+  sections: SectionMeta[];
   sessions: PracticeSessionSummary[];
 }
 
-export function RecentSessions({ sessions }: RecentSessionsProps) {
+export function RecentSessions({ sections, sessions }: RecentSessionsProps) {
+  const sectionMap = new Map(sections.map((s) => [s.id, s]));
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between border-b border-border">
         <CardTitle className="font-heading">Historial de sesiones</CardTitle>
-        <Button variant="outline" size="sm" render={<Link href="/practice" />}>
+        <ButtonLink href="/practice" variant="outline" size="sm">
           Nueva práctica
           <ArrowRight />
-        </Button>
+        </ButtonLink>
       </CardHeader>
       <CardContent className="p-0">
         {sessions.length === 0 ? (
@@ -33,7 +35,7 @@ export function RecentSessions({ sessions }: RecentSessionsProps) {
         ) : (
           <ul className="divide-y divide-border">
             {sessions.map((session) => {
-              const section = getSection(session.sectionId);
+              const section = sectionMap.get(session.sectionId);
               const date = new Date(session.completedAt);
               return (
                 <li

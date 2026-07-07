@@ -2,10 +2,10 @@ import { type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/proxy";
 
 /**
- * Next.js proxy (middleware) that refreshes the Supabase session cookies
- * on every request and enforces route protection.
+ * Next.js 16 proxy (formerly middleware). Runs on every matched request
+ * to refresh the Supabase session cookies and enforce route protection.
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   return updateSession(request);
 }
 

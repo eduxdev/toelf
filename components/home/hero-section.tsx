@@ -1,16 +1,12 @@
-import Link from "next/link";
-import { ArrowRight, Sparkle } from "@phosphor-icons/react/dist/ssr";
-import { Button } from "@/components/ui/button";
+import { ArrowRight} from "@phosphor-icons/react/dist/ssr";
+import { ButtonLink } from "@/components/ui/button-link";
 
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden border-b border-border bg-background">
       <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
         <div className="flex flex-col items-start gap-6 md:max-w-3xl">
-          <span className="inline-flex items-center gap-2 border border-border bg-secondary px-2 py-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-            <Sparkle weight="fill" className="size-3" />
-            Preparación TOEFL ITP · TESJo
-          </span>
+         
           <h1 className="font-heading text-4xl font-semibold leading-tight tracking-tight text-foreground md:text-6xl">
             Domina las secciones del TOEFL ITP con práctica dirigida.
           </h1>
@@ -20,13 +16,13 @@ export function HeroSection() {
             que llegues listo al examen del TESJo.
           </p>
           <div className="flex flex-wrap gap-3">
-            <Button size="lg" render={<Link href="/practice" />}>
+            <ButtonLink href="/practice" size="lg">
               Empezar práctica
               <ArrowRight />
-            </Button>
-            <Button size="lg" variant="outline" render={<Link href="/profile" />}>
+            </ButtonLink>
+            <ButtonLink href="/profile" size="lg" variant="outline">
               Ver mi progreso
-            </Button>
+            </ButtonLink>
           </div>
         </div>
       </div>

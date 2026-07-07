@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { User, SignIn, SignOut, ChartLineUp } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button-link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,13 +26,13 @@ export async function UserMenu() {
   if (!user) {
     return (
       <div className="flex items-center gap-1">
-        <Button variant="ghost" size="sm" render={<Link href="/login" />}>
+        <ButtonLink href="/login" variant="ghost" size="sm">
           <SignIn />
           Ingresar
-        </Button>
-        <Button size="sm" render={<Link href="/signup" />}>
+        </ButtonLink>
+        <ButtonLink href="/signup" size="sm">
           Registrarse
-        </Button>
+        </ButtonLink>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { GraduationCap, ChartLineUp, House } from "@phosphor-icons/react/dist/ssr";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button-link";
 import { UserMenu } from "@/components/layout/user-menu";
 
 const NAV_LINKS = [
@@ -21,22 +21,20 @@ export function SiteHeader() {
             <span className="text-sm font-semibold tracking-tight">
               TOEFL ITP
             </span>
-            <span className="text-[10px] uppercase text-muted-foreground">
-              TESJo Prep
-            </span>
+            
           </div>
         </Link>
         <nav className="hidden items-center gap-1 md:flex">
           {NAV_LINKS.map((link) => (
-            <Button
+            <ButtonLink
               key={link.href}
+              href={link.href}
               variant="ghost"
               size="sm"
-              render={<Link href={link.href} />}
             >
               <link.icon weight="regular" />
               {link.label}
-            </Button>
+            </ButtonLink>
           ))}
         </nav>
         <UserMenu />

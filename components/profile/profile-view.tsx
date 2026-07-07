@@ -1,28 +1,33 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { ProfileSummary } from "@/components/profile/profile-summary";
 import { SectionStats } from "@/components/profile/section-stats";
 import { RecentSessions } from "@/components/profile/recent-sessions";
-import { readSessions } from "@/lib/services/session-store";
-import type { PracticeSessionSummary } from "@/lib/types/practice";
+import { fetchSections } from "@/lib/services/questions-service";
+import {
+  fetchProfileStats,
+  fetchUserSessions,
+} from "@/lib/services/sessions-service";
 
 /**
- * Client wrapper that pulls sessions from localStorage and composes the
- * three profile blocks. Keeps the page file clean.
+ * Server component: pulls user profile, sessions and sections from Supabase
+ * and composes the three profile blocks.
  */
-export function ProfileView() {
-  const [sessions, setSessions] = useState<PracticeSessionSummary[]>([]);
-
-  useEffect(() => {
-    setSessions(readSessions());
-  }, []);
+export async function ProfileView() {
+  const [profile, sessions, sections] = await Promise.all([
+    fetchProfileStats(),
+    fetchUserSessions(),
+    fetchSections(),
+  ]);
 
   return (
     <div className="space-y-6">
-      <ProfileSummary sessions={sessions} />
-      <SectionStats sessions={sessions} />
-      <RecentSessions sessions={sessions} />
+      <ProfileSummary
+        fullName={profile.fullName ?? "Estudiante"}
+        email={profile.email}
+        goalScore={profile.goalScore}
+        sessions={sessions}
+      />
+      <SectionStats sections={sections} sessions={sessions} />
+      <RecentSessions sections={sections} sessions={sessions} />
     </div>
   );
 }

@@ -59,6 +59,17 @@ export async function insertPracticeSession(
     await supabase.from("session_answers").insert(rows);
   }
 
+  // Update the per-user history so the next batch prefers unseen questions.
+  const historyPayload = input.answers.map((a) => ({
+    question_id: a.questionId,
+    is_correct: a.isCorrect,
+  }));
+  if (historyPayload.length > 0) {
+    await supabase.rpc("record_question_history", {
+      p_answers: historyPayload,
+    });
+  }
+
   return { id: data.id as string, error: null };
 }
 

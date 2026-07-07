@@ -38,9 +38,47 @@ export async function fetchSection(id: string): Promise<SectionMeta | null> {
   return sections.find((section) => section.id === id) ?? null;
 }
 
+interface QuestionRow {
+  id: string;
+  number: number;
+  type: "structure" | "written-expression";
+  payload: {
+    stem?: string;
+    options?: { key: string; label: string }[];
+    fragments?: { text: string; underlined?: string }[];
+    correction?: string;
+  };
+  correct: string;
+  explanation: string | null;
+}
+
+function hydrateQuestion(row: QuestionRow): PracticeQuestion {
+  if (row.type === "structure") {
+    return {
+      id: row.id,
+      number: row.number,
+      type: "structure",
+      stem: row.payload.stem ?? "",
+      options: (row.payload.options ?? []) as StructureQuestion["options"],
+      correct: row.correct as StructureQuestion["correct"],
+      explanation: row.explanation ?? undefined,
+    };
+  }
+  return {
+    id: row.id,
+    number: row.number,
+    type: "written-expression",
+    fragments: (row.payload.fragments ??
+      []) as WrittenExpressionQuestion["fragments"],
+    correction: row.payload.correction,
+    correct: row.correct as WrittenExpressionQuestion["correct"],
+    explanation: row.explanation ?? undefined,
+  };
+}
+
 /**
- * Loads all questions for a given section, hydrated to the client
- * TypeScript shape used by the UI components.
+ * Loads a full question bank for a section, ordered by number.
+ * Used mostly for admin/preview scenarios.
  */
 export async function fetchQuestionsBySection(
   sectionId: SectionId
@@ -48,32 +86,29 @@ export async function fetchQuestionsBySection(
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("questions")
-    .select("id, section_id, number, type, payload, correct, explanation")
+    .select("id, number, type, payload, correct, explanation")
     .eq("section_id", sectionId)
     .order("number");
 
   if (error || !data) return [];
+  return (data as QuestionRow[]).map(hydrateQuestion);
+}
 
-  return data.map((row) => {
-    if (row.type === "structure") {
-      return {
-        id: row.id,
-        number: row.number,
-        type: "structure",
-        stem: row.payload.stem,
-        options: row.payload.options,
-        correct: row.correct,
-        explanation: row.explanation ?? undefined,
-      } as StructureQuestion;
-    }
-    return {
-      id: row.id,
-      number: row.number,
-      type: "written-expression",
-      fragments: row.payload.fragments,
-      correction: row.payload.correction,
-      correct: row.correct,
-      explanation: row.explanation ?? undefined,
-    } as WrittenExpressionQuestion;
+/**
+ * Pulls a randomized practice batch for the current user via the
+ * `get_practice_batch` RPC. The RPC prioritises questions the user
+ * has never seen and, after that, the ones they answered longest ago.
+ */
+export async function fetchPracticeBatch(
+  sectionId: SectionId,
+  size = 15
+): Promise<PracticeQuestion[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("get_practice_batch", {
+    p_section_id: sectionId,
+    p_size: size,
   });
+
+  if (error || !data) return [];
+  return (data as QuestionRow[]).map(hydrateQuestion);
 }

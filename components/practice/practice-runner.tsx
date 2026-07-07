@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import Link from "next/link";
 import { toast } from "sonner";
 import {
   ArrowLeft,
@@ -11,6 +10,7 @@ import {
   ListMagnifyingGlass,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button-link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PracticeInstructions } from "@/components/practice/practice-instructions";
@@ -97,13 +97,13 @@ export function PracticeRunner({ section, questions }: PracticeRunnerProps) {
             <ArrowsClockwise />
             Volver a practicar
           </Button>
-          <Button variant="outline" render={<Link href="/practice" />}>
+          <ButtonLink href="/practice" variant="outline">
             Otras secciones
-          </Button>
-          <Button variant="ghost" render={<Link href="/profile" />}>
+          </ButtonLink>
+          <ButtonLink href="/profile" variant="ghost">
             <ListMagnifyingGlass />
             Ver historial
-          </Button>
+          </ButtonLink>
         </div>
         <ReviewList questions={questions} answers={session.results} />
       </div>
