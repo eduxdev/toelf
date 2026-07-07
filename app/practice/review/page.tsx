@@ -91,6 +91,7 @@ function buildReviewFallbackSection(
       "Mezcla de preguntas que has fallado o dejado en blanco. Prioridad al peor puntaje.",
     timeLimitMinutes: 15,
     questionCount: sections.reduce((acc, s) => acc + s.questionCount, 0),
+    group: "practice",
     instructionKey: "structure",
   };
 }
