@@ -6,6 +6,7 @@ interface PracticeInstructionsProps {
     | "structure"
     | "written-expression"
     | "grammar-focus"
+    | "verb-tenses"
     | "review";
 }
 
