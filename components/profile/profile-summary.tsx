@@ -59,17 +59,20 @@ export function ProfileSummary({
             icon={<GraduationCap weight="regular" className="size-4" />}
             label="Sesiones"
             value={totalSessions}
+            tone="warm"
           />
           <Stat
             icon={<ChartLineUp weight="regular" className="size-4" />}
             label="Mejor %"
             value={bestScore}
             suffix="%"
+            tone="sage"
           />
           <Stat
             icon={<Target weight="regular" className="size-4" />}
             label="Preguntas"
             value={totalQuestions}
+            tone="warm"
           />
         </div>
       </CardContent>
@@ -82,15 +85,21 @@ function Stat({
   label,
   value,
   suffix,
+  tone = "warm",
 }: {
   icon: React.ReactNode;
   label: string;
   value: number;
   suffix?: string;
+  tone?: "warm" | "sage";
 }) {
+  const toneClass =
+    tone === "sage"
+      ? "border-sage-foreground/20 bg-sage text-sage-foreground"
+      : "border-warm-foreground/20 bg-warm text-warm-foreground";
   return (
-    <div className="min-w-24 border border-border bg-secondary/40 px-3 py-2">
-      <div className="flex items-center gap-1 text-[11px] uppercase tracking-widest text-muted-foreground">
+    <div className={`min-w-24 border px-3 py-2 ${toneClass}`}>
+      <div className="flex items-center gap-1 text-[11px] uppercase tracking-widest opacity-80">
         {icon}
         {label}
       </div>

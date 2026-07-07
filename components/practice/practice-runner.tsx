@@ -39,7 +39,12 @@ interface PracticeRunnerProps {
  * navigation, timing and stores the final session locally.
  */
 export function PracticeRunner({ section, questions }: PracticeRunnerProps) {
-  const session = usePracticeSession(questions);
+  // Freeze the batch received from the server on mount. Otherwise a Server
+  // Action revalidation (e.g. after `savePracticeSession`) may reorder the
+  // questions via `random()` and shuffle the review view.
+  const [sessionQuestions] = useState<PracticeQuestion[]>(() => questions);
+
+  const session = usePracticeSession(sessionQuestions);
   const elapsed = usePracticeTimer(!session.finished);
   const [savedDuration, setSavedDuration] = useState<number>(0);
   const [isSaving, startSaving] = useTransition();
@@ -55,10 +60,10 @@ export function PracticeRunner({ section, questions }: PracticeRunnerProps) {
     startSaving(async () => {
       const result = await savePracticeSession({
         sectionId: section.id,
-        totalQuestions: questions.length,
+        totalQuestions: sessionQuestions.length,
         correctAnswers: correct,
-        scorePercent: questions.length
-          ? Math.round((correct / questions.length) * 100)
+        scorePercent: sessionQuestions.length
+          ? Math.round((correct / sessionQuestions.length) * 100)
           : 0,
         durationSeconds: duration,
         answers: evaluated,
@@ -88,7 +93,7 @@ export function PracticeRunner({ section, questions }: PracticeRunnerProps) {
       <div className="space-y-6">
         <PracticeSummary
           sectionName={section.name}
-          questions={questions}
+          questions={sessionQuestions}
           answers={session.results}
           durationSeconds={savedDuration || elapsed}
         />
@@ -105,7 +110,7 @@ export function PracticeRunner({ section, questions }: PracticeRunnerProps) {
             Ver historial
           </ButtonLink>
         </div>
-        <ReviewList questions={questions} answers={session.results} />
+        <ReviewList questions={sessionQuestions} answers={session.results} />
       </div>
     );
   }
@@ -166,7 +171,7 @@ export function PracticeRunner({ section, questions }: PracticeRunnerProps) {
             )}
           </div>
           <span className="text-xs text-muted-foreground">
-            {answeredIds}/{questions.length} contestadas
+            {answeredIds}/{sessionQuestions.length} contestadas
           </span>
         </div>
       </div>
@@ -174,11 +179,11 @@ export function PracticeRunner({ section, questions }: PracticeRunnerProps) {
       <aside className="space-y-4 lg:sticky lg:top-20 lg:self-start">
         <PracticeProgress
           current={session.index}
-          total={questions.length}
+          total={sessionQuestions.length}
           answered={session.answeredCount}
         />
         <PracticeNavigator
-          questions={questions}
+          questions={sessionQuestions}
           answers={session.answers}
           currentIndex={session.index}
           onSelect={session.goTo}

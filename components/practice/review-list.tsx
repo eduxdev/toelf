@@ -18,13 +18,17 @@ interface ReviewListProps {
 
 /**
  * Shows every question of the session with the correct answer highlighted,
- * the user's selection and, when present, an explanation.
+ * the user's selection and, when present, an explanation. Answers are
+ * looked up by `questionId` so the review always follows the practice
+ * order, regardless of the answers array position.
  */
 export function ReviewList({ questions, answers }: ReviewListProps) {
+  const answerById = new Map(answers.map((a) => [a.questionId, a]));
+
   return (
     <div className="space-y-4">
       {questions.map((question, index) => {
-        const answer = answers[index];
+        const answer = answerById.get(question.id);
         const selected = (answer?.answer ?? null) as OptionKey | null;
         const isCorrect = answer?.isCorrect ?? false;
         const isBlank = !answer?.answer;

@@ -9,12 +9,8 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button-link";
+import { cn } from "@/lib/utils";
 import type { SectionMeta } from "@/lib/types/practice";
-
-const ICONS = {
-  structure: ListChecks,
-  "written-expression": PencilLine,
-} as const;
 
 interface SectionCardProps {
   section: SectionMeta;
@@ -22,14 +18,41 @@ interface SectionCardProps {
 
 const BATCH_PRESETS = [10, 15, 20];
 
+const STYLES = {
+  structure: {
+    icon: ListChecks,
+    accent: "bg-warm text-warm-foreground border-warm-foreground/20",
+    tab: "bg-warm/40",
+  },
+  "written-expression": {
+    icon: PencilLine,
+    accent: "bg-sage text-sage-foreground border-sage-foreground/20",
+    tab: "bg-sage/40",
+  },
+} as const;
+
 export function SectionCard({ section }: SectionCardProps) {
-  const Icon = ICONS[section.id];
+  const style = STYLES[section.id];
+  const Icon = style.icon;
   return (
-    <Card className="flex h-full flex-col border-border">
+    <Card className="relative flex h-full flex-col overflow-hidden border-border">
+      <span
+        aria-hidden
+        className={cn(
+          "absolute inset-x-0 top-0 h-1",
+          style.tab,
+          "border-b border-border/60"
+        )}
+      />
       <CardHeader className="flex flex-row items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <span className="grid size-9 place-items-center border border-border bg-secondary">
-            <Icon weight="regular" className="size-5 text-foreground" />
+          <span
+            className={cn(
+              "grid size-9 place-items-center border",
+              style.accent
+            )}
+          >
+            <Icon weight="regular" className="size-5" />
           </span>
           <div>
             <CardTitle className="font-heading text-lg tracking-tight">
