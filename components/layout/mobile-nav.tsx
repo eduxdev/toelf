@@ -3,11 +3,10 @@
 import Link from "next/link";
 import { useState, type ComponentType } from "react";
 import type { IconProps } from "@phosphor-icons/react";
-import { List, X } from "@phosphor-icons/react";
+import { List } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -46,15 +45,8 @@ export function MobileNav({ links }: MobileNavProps) {
         <List weight="regular" />
       </SheetTrigger>
       <SheetContent side="left" className="w-64 p-0">
-        <SheetHeader className="flex flex-row items-center justify-between border-b border-border px-4 py-3">
+        <SheetHeader className="border-b border-border px-4 py-3">
           <SheetTitle className="font-heading text-sm">Menú</SheetTitle>
-          <SheetClose
-            render={
-              <Button variant="ghost" size="icon-xs" aria-label="Cerrar" />
-            }
-          >
-            <X />
-          </SheetClose>
         </SheetHeader>
         <nav className="flex flex-col p-2">
           {links.map((link) => (
