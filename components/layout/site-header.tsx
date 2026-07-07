@@ -1,27 +1,16 @@
 import Link from "next/link";
-import {
-  GraduationCap,
-  ChartLineUp,
-  House,
-  BookOpen,
-} from "@phosphor-icons/react/dist/ssr";
+import { GraduationCap } from "@phosphor-icons/react/dist/ssr";
 import { ButtonLink } from "@/components/ui/button-link";
 import { UserMenu } from "@/components/layout/user-menu";
 import { MobileNav } from "@/components/layout/mobile-nav";
-
-const NAV_LINKS = [
-  { href: "/", label: "Inicio", icon: House },
-  { href: "/practice", label: "Practicar", icon: GraduationCap },
-  { href: "/guide", label: "Guía", icon: BookOpen },
-  { href: "/profile", label: "Perfil", icon: ChartLineUp },
-];
+import { NAV_LINKS } from "@/components/layout/nav-links";
 
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/90 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-4 md:px-6">
         <div className="flex items-center gap-2">
-          <MobileNav links={NAV_LINKS} />
+          <MobileNav />
           <Link
             href="/"
             className="flex items-center gap-2 font-heading"

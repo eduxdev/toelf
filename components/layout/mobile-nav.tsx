@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ComponentType } from "react";
-import type { IconProps } from "@phosphor-icons/react";
+import { useState } from "react";
 import { List } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,22 +11,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-
-interface NavLink {
-  href: string;
-  label: string;
-  icon: ComponentType<IconProps>;
-}
-
-interface MobileNavProps {
-  links: NavLink[];
-}
+import { NAV_LINKS } from "@/components/layout/nav-links";
 
 /**
  * Drawer-based nav shown below the `md` breakpoint. Opens from the left and
  * lists the same links as the desktop nav, one per row for easy tap targets.
+ * Reads its links from a shared module so no components have to be passed
+ * across the RSC boundary.
  */
-export function MobileNav({ links }: MobileNavProps) {
+export function MobileNav() {
   const [open, setOpen] = useState(false);
 
   return (
@@ -49,7 +41,7 @@ export function MobileNav({ links }: MobileNavProps) {
           <SheetTitle className="font-heading text-sm">Menú</SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col p-2">
-          {links.map((link) => (
+          {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
