@@ -4,6 +4,8 @@ import { CheckCircle, XCircle, MinusCircle } from "@phosphor-icons/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StructureQuestionView } from "@/components/practice/structure-question-view";
 import { WrittenQuestionView } from "@/components/practice/written-question-view";
+import { IdentifyQuestionView } from "@/components/practice/identify-question-view";
+import { ReportQuestionDialog } from "@/components/practice/report-question-dialog";
 import { cn } from "@/lib/utils";
 import type {
   OptionKey,
@@ -35,7 +37,7 @@ export function ReviewList({ questions, answers }: ReviewListProps) {
 
         return (
           <Card key={question.id} className="border-border">
-            <CardHeader className="flex flex-row items-center justify-between border-b border-border">
+            <CardHeader className="flex flex-row items-center justify-between gap-3 border-b border-border">
               <CardTitle className="flex items-center gap-2 font-mono text-sm">
                 <span className="grid size-6 place-items-center border border-border bg-secondary">
                   {index + 1}
@@ -44,13 +46,27 @@ export function ReviewList({ questions, answers }: ReviewListProps) {
                   status={isBlank ? "blank" : isCorrect ? "correct" : "wrong"}
                 />
               </CardTitle>
-              <span className="text-[11px] font-mono text-muted-foreground">
-                Correcta: {question.correct}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-mono text-muted-foreground">
+                  Correcta: {question.correct}
+                </span>
+                <ReportQuestionDialog
+                  questionId={question.id}
+                  currentCorrect={question.correct}
+                />
+              </div>
             </CardHeader>
             <CardContent className="space-y-4 pt-4">
               {question.type === "structure" ? (
                 <StructureQuestionView
+                  question={question}
+                  selected={selected}
+                  reviewCorrect={question.correct}
+                  disabled
+                  onSelect={() => {}}
+                />
+              ) : question.type === "identify" ? (
+                <IdentifyQuestionView
                   question={question}
                   selected={selected}
                   reviewCorrect={question.correct}

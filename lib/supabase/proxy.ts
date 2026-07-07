@@ -33,9 +33,16 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  /*
+   * We verify the JWT locally via the project's JWKS instead of hitting
+   * the /auth/v1/user endpoint on every request. getClaims() falls back
+   * to a network call only for legacy HS256 tokens; for the modern
+   * asymmetric keys used by Supabase Auth today, verification stays
+   * fully in-process (JWKS is cached).
+   */
+  const { data, error } = await supabase.auth.getClaims();
+  const claims = error ? null : data?.claims ?? null;
+  const isAuthenticated = Boolean(claims?.sub);
 
   const pathname = request.nextUrl.pathname;
   const isProtected = protectedPrefixes.some((prefix) =>
@@ -45,14 +52,14 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith(prefix)
   );
 
-  if (!user && isProtected) {
+  if (!isAuthenticated && isProtected) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/login";
     redirectUrl.searchParams.set("next", pathname);
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (user && isAuthRoute) {
+  if (isAuthenticated && isAuthRoute) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/practice";
     return NextResponse.redirect(redirectUrl);

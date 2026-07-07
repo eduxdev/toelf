@@ -19,6 +19,7 @@ import { PracticeTimer } from "@/components/practice/practice-timer";
 import { PracticeNavigator } from "@/components/practice/practice-navigator";
 import { StructureQuestionView } from "@/components/practice/structure-question-view";
 import { WrittenQuestionView } from "@/components/practice/written-question-view";
+import { IdentifyQuestionView } from "@/components/practice/identify-question-view";
 import { PracticeSummary } from "@/components/practice/practice-summary";
 import { ReviewList } from "@/components/practice/review-list";
 import { usePracticeSession } from "@/hooks/use-practice-session";
@@ -32,13 +33,19 @@ import type {
 interface PracticeRunnerProps {
   section: SectionMeta;
   questions: PracticeQuestion[];
+  /** When true, the header/summary refer to a review session instead of a raw section. */
+  reviewMode?: boolean;
 }
 
 /**
  * Client-side orchestrator: renders the correct question view, handles
  * navigation, timing and stores the final session locally.
  */
-export function PracticeRunner({ section, questions }: PracticeRunnerProps) {
+export function PracticeRunner({
+  section,
+  questions,
+  reviewMode = false,
+}: PracticeRunnerProps) {
   // Freeze the batch received from the server on mount. Otherwise a Server
   // Action revalidation (e.g. after `savePracticeSession`) may reorder the
   // questions via `random()` and shuffle the review view.
@@ -118,7 +125,11 @@ export function PracticeRunner({ section, questions }: PracticeRunnerProps) {
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_240px]">
       <div className="space-y-4">
-        <PracticeInstructions instructionKey={section.instructionKey} />
+        {reviewMode ? (
+          <PracticeInstructions instructionKey="review" />
+        ) : (
+          <PracticeInstructions instructionKey={section.instructionKey} />
+        )}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between border-b border-border">
             <CardTitle className="flex items-center gap-2 font-mono text-sm">
@@ -134,6 +145,12 @@ export function PracticeRunner({ section, questions }: PracticeRunnerProps) {
           <CardContent className="space-y-6 pt-6">
             {session.question.type === "structure" ? (
               <StructureQuestionView
+                question={session.question}
+                selected={currentAnswer}
+                onSelect={session.select}
+              />
+            ) : session.question.type === "identify" ? (
+              <IdentifyQuestionView
                 question={session.question}
                 selected={currentAnswer}
                 onSelect={session.select}

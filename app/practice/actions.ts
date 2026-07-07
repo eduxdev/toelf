@@ -24,3 +24,21 @@ export async function savePracticeSession(
   }
   return result;
 }
+
+
+import { insertQuestionReport, type ReportInput } from "@/lib/services/reports-service";
+
+export interface ReportPracticeResult {
+  id: string | null;
+  error: string | null;
+}
+
+/**
+ * Persists a user report for a question that seems wrong.
+ * Errors bubble up so the UI can show them.
+ */
+export async function reportPracticeQuestion(
+  input: ReportInput
+): Promise<ReportPracticeResult> {
+  return insertQuestionReport(input);
+}

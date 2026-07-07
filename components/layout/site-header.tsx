@@ -1,11 +1,17 @@
 import Link from "next/link";
-import { GraduationCap, ChartLineUp, House } from "@phosphor-icons/react/dist/ssr";
+import {
+  GraduationCap,
+  ChartLineUp,
+  House,
+  BookOpen,
+} from "@phosphor-icons/react/dist/ssr";
 import { ButtonLink } from "@/components/ui/button-link";
 import { UserMenu } from "@/components/layout/user-menu";
 
 const NAV_LINKS = [
   { href: "/", label: "Inicio", icon: House },
   { href: "/practice", label: "Practicar", icon: GraduationCap },
+  { href: "/guide", label: "Guía", icon: BookOpen },
   { href: "/profile", label: "Perfil", icon: ChartLineUp },
 ];
 

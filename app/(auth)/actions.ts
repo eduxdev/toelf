@@ -45,8 +45,8 @@ export async function signupAction(
   if (!email || !password) {
     return { error: "Correo y contraseña son obligatorios." };
   }
-  if (password.length < 6) {
-    return { error: "La contraseña debe tener al menos 6 caracteres." };
+  if (password.length < 8) {
+    return { error: "La contraseña debe tener al menos 8 caracteres." };
   }
 
   const supabase = await createSupabaseServerClient();

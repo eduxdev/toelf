@@ -1,4 +1,10 @@
-export type SectionId = "structure" | "written-expression";
+export type SectionId =
+  | "structure"
+  | "written-expression"
+  | "grammar-focus"
+  | "verb-tenses";
+
+export type SectionGroup = "exam" | "practice";
 
 export type OptionKey = "A" | "B" | "C" | "D";
 
@@ -41,7 +47,25 @@ export interface WrittenExpressionQuestion {
   explanation?: string;
 }
 
-export type PracticeQuestion = StructureQuestion | WrittenExpressionQuestion;
+/**
+ * Identification question: same visual pattern as Written Expression
+ * (four underlined choices), but the task is to identify a specific
+ * part of speech instead of an error.
+ */
+export interface IdentifyQuestion {
+  id: string;
+  type: "identify";
+  number: number;
+  prompt: string;
+  fragments: Array<{ text: string; underlined?: OptionKey }>;
+  correct: OptionKey;
+  explanation?: string;
+}
+
+export type PracticeQuestion =
+  | StructureQuestion
+  | WrittenExpressionQuestion
+  | IdentifyQuestion;
 
 export interface UserAnswer {
   questionId: string;
@@ -67,5 +91,10 @@ export interface SectionMeta {
   longDescription: string;
   timeLimitMinutes: number;
   questionCount: number;
-  instructionKey: "structure" | "written-expression";
+  group: SectionGroup;
+  instructionKey:
+    | "structure"
+    | "written-expression"
+    | "grammar-focus"
+    | "verb-tenses";
 }

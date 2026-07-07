@@ -42,12 +42,12 @@ export function SignupForm() {
           id="password"
           name="password"
           type="password"
-          minLength={6}
+          minLength={8}
           autoComplete="new-password"
           required
         />
         <p className="text-xs text-muted-foreground">
-          Mínimo 6 caracteres.
+          Mínimo 8 caracteres.
         </p>
       </div>
       {state.error ? (

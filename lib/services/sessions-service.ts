@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/supabase/auth";
 import type {
   PracticeSessionSummary,
   SectionId,
@@ -18,17 +19,16 @@ export interface InsertSessionInput {
 
 /**
  * Persists a completed practice session and its per-question answers.
- * Requires an authenticated user.
+ * Auth is verified statically via the JWT (getClaims) — no BD roundtrip.
+ * RLS on the server is what actually enforces ownership.
  */
 export async function insertPracticeSession(
   input: InsertSessionInput
 ): Promise<{ id: string | null; error: string | null }> {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser();
   if (!user) return { id: null, error: "not-authenticated" };
 
+  const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("practice_sessions")
     .insert({
@@ -46,20 +46,17 @@ export async function insertPracticeSession(
     return { id: null, error: error?.message ?? "unknown" };
   }
 
-  const rows = input.answers
-    .filter((a) => a.answer !== null || a.answer === null)
-    .map((a) => ({
-      session_id: data.id,
-      question_id: a.questionId,
-      answer: a.answer,
-      is_correct: a.isCorrect,
-    }));
+  const rows = input.answers.map((a) => ({
+    session_id: data.id,
+    question_id: a.questionId,
+    answer: a.answer,
+    is_correct: a.isCorrect,
+  }));
 
   if (rows.length > 0) {
     await supabase.from("session_answers").insert(rows);
   }
 
-  // Update the per-user history so the next batch prefers unseen questions.
   const historyPayload = input.answers.map((a) => ({
     question_id: a.questionId,
     is_correct: a.isCorrect,
@@ -79,12 +76,10 @@ export async function insertPracticeSession(
 export async function fetchUserSessions(
   limit = 25
 ): Promise<PracticeSessionSummary[]> {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser();
   if (!user) return [];
 
+  const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("practice_sessions")
     .select(
@@ -108,16 +103,18 @@ export async function fetchUserSessions(
   }));
 }
 
-/** Total counts to display on the profile summary. */
+/**
+ * Basic stats shown at the top of the profile page.
+ * Name and email come from the JWT claims (no roundtrip); goal_score is
+ * the only field that still hits the profiles table.
+ */
 export async function fetchProfileStats() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser();
   if (!user) {
     return { fullName: null, email: null, goalScore: 550 };
   }
 
+  const supabase = await createSupabaseServerClient();
   const { data } = await supabase
     .from("profiles")
     .select("full_name, goal_score")
@@ -125,8 +122,8 @@ export async function fetchProfileStats() {
     .maybeSingle();
 
   return {
-    fullName: data?.full_name ?? user.email ?? "Estudiante",
-    email: user.email ?? null,
+    fullName: data?.full_name ?? user.fullName ?? user.email ?? "Estudiante",
+    email: user.email,
     goalScore: data?.goal_score ?? 550,
   };
 }

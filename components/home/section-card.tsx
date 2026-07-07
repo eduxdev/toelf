@@ -1,4 +1,11 @@
-import { ArrowRight, ListChecks, PencilLine, Shuffle } from "@phosphor-icons/react/dist/ssr";
+import {
+  ArrowRight,
+  ListChecks,
+  PencilLine,
+  Shuffle,
+  MagnifyingGlass,
+  Clock,
+} from "@phosphor-icons/react/dist/ssr";
 import {
   Card,
   CardContent,
@@ -28,6 +35,16 @@ const STYLES = {
     icon: PencilLine,
     accent: "bg-sage text-sage-foreground border-sage-foreground/20",
     tab: "bg-sage/40",
+  },
+  "grammar-focus": {
+    icon: MagnifyingGlass,
+    accent: "bg-secondary text-foreground border-border",
+    tab: "bg-secondary",
+  },
+  "verb-tenses": {
+    icon: Clock,
+    accent: "bg-secondary text-foreground border-border",
+    tab: "bg-secondary",
   },
 } as const;
 

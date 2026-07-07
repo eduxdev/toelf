@@ -12,17 +12,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { logoutAction } from "@/app/(auth)/actions";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/supabase/auth";
 
 /**
- * Server component: shows either a signed-in avatar/menu or Login/Signup
- * calls to action in the header.
+ * Server component: shows either the signed-in avatar/menu or Login/Signup
+ * calls to action. Uses the JWT claims (getClaims) — no DB roundtrip.
  */
 export async function UserMenu() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser();
 
   if (!user) {
     return (
@@ -38,17 +35,11 @@ export async function UserMenu() {
     );
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_name")
-    .eq("id", user.id)
-    .maybeSingle();
-
   const displayName =
-    profile?.full_name || user.email?.split("@")[0] || "Estudiante";
+    user.fullName || user.email?.split("@")[0] || "Estudiante";
   const initials = displayName
     .split(" ")
-    .map((word: string) => word[0])
+    .map((word) => word[0])
     .join("")
     .slice(0, 2)
     .toUpperCase();

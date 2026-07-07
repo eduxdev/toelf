@@ -1,6 +1,7 @@
 import { ProfileSummary } from "@/components/profile/profile-summary";
 import { SectionStats } from "@/components/profile/section-stats";
 import { RecentSessions } from "@/components/profile/recent-sessions";
+import { ReviewCta } from "@/components/profile/review-cta";
 import { fetchSections } from "@/lib/services/questions-service";
 import {
   fetchProfileStats,
@@ -26,6 +27,7 @@ export async function ProfileView() {
         goalScore={profile.goalScore}
         sessions={sessions}
       />
+      <ReviewCta />
       <SectionStats sections={sections} sessions={sessions} />
       <RecentSessions sections={sections} sessions={sessions} />
     </div>
