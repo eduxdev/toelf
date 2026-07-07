@@ -1,0 +1,46 @@
+import Link from "next/link";
+import { GraduationCap, ChartLineUp, House } from "@phosphor-icons/react/dist/ssr";
+import { Button } from "@/components/ui/button";
+import { UserMenu } from "@/components/layout/user-menu";
+
+const NAV_LINKS = [
+  { href: "/", label: "Inicio", icon: House },
+  { href: "/practice", label: "Practicar", icon: GraduationCap },
+  { href: "/profile", label: "Perfil", icon: ChartLineUp },
+];
+
+export function SiteHeader() {
+  return (
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/90 backdrop-blur">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
+        <Link href="/" className="flex items-center gap-2 font-heading">
+          <span className="grid size-7 place-items-center border border-foreground/80 bg-foreground text-background">
+            <GraduationCap weight="bold" className="size-4" />
+          </span>
+          <div className="flex flex-col leading-none">
+            <span className="text-sm font-semibold tracking-tight">
+              TOEFL ITP
+            </span>
+            <span className="text-[10px] uppercase text-muted-foreground">
+              TESJo Prep
+            </span>
+          </div>
+        </Link>
+        <nav className="hidden items-center gap-1 md:flex">
+          {NAV_LINKS.map((link) => (
+            <Button
+              key={link.href}
+              variant="ghost"
+              size="sm"
+              render={<Link href={link.href} />}
+            >
+              <link.icon weight="regular" />
+              {link.label}
+            </Button>
+          ))}
+        </nav>
+        <UserMenu />
+      </div>
+    </header>
+  );
+}
