@@ -66,6 +66,8 @@ function hydrateQuestion(row: QuestionRow): PracticeQuestion {
       options: (row.payload.options ?? []) as StructureQuestion["options"],
       correct: row.correct as StructureQuestion["correct"],
       explanation: row.explanation ?? undefined,
+      optionExplanations: (row.payload.option_explanations as
+        Partial<Record<string, string>> | undefined) ?? undefined,
     };
   }
   if (row.type === "identify") {
@@ -78,6 +80,8 @@ function hydrateQuestion(row: QuestionRow): PracticeQuestion {
         []) as WrittenExpressionQuestion["fragments"],
       correct: row.correct as WrittenExpressionQuestion["correct"],
       explanation: row.explanation ?? undefined,
+      optionExplanations: (row.payload.option_explanations as
+        Partial<Record<string, string>> | undefined) ?? undefined,
     };
   }
   return {
@@ -89,6 +93,8 @@ function hydrateQuestion(row: QuestionRow): PracticeQuestion {
     correction: row.payload.correction,
     correct: row.correct as WrittenExpressionQuestion["correct"],
     explanation: row.explanation ?? undefined,
+    optionExplanations: (row.payload.option_explanations as
+      Partial<Record<string, string>> | undefined) ?? undefined,
   };
 }
 

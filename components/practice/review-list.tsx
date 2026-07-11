@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StructureQuestionView } from "@/components/practice/structure-question-view";
 import { WrittenQuestionView } from "@/components/practice/written-question-view";
 import { IdentifyQuestionView } from "@/components/practice/identify-question-view";
+import { OptionExplanations } from "@/components/practice/option-explanations";
 import { ReportQuestionDialog } from "@/components/practice/report-question-dialog";
 import { cn } from "@/lib/utils";
 import type {
@@ -87,6 +88,13 @@ export function ReviewList({ questions, answers }: ReviewListProps) {
                   <span className="font-semibold">Corrección:</span>{" "}
                   {question.correction}
                 </p>
+              ) : null}
+              {question.optionExplanations ? (
+                <OptionExplanations
+                  explanations={question.optionExplanations}
+                  correct={question.correct}
+                  selected={selected}
+                />
               ) : null}
               {question.explanation ? (
                 <p className="text-sm leading-relaxed text-muted-foreground">

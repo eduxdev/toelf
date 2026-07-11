@@ -25,6 +25,8 @@ export interface StructureQuestion {
   options: QuestionOption[];
   correct: OptionKey;
   explanation?: string;
+  /** Per-option explanations, keyed by A/B/C/D. Optional — only for questions that have them. */
+  optionExplanations?: Partial<Record<OptionKey, string>>;
 }
 
 /**
@@ -45,6 +47,7 @@ export interface WrittenExpressionQuestion {
   correct: OptionKey;
   correction?: string;
   explanation?: string;
+  optionExplanations?: Partial<Record<OptionKey, string>>;
 }
 
 /**
@@ -60,6 +63,7 @@ export interface IdentifyQuestion {
   fragments: Array<{ text: string; underlined?: OptionKey }>;
   correct: OptionKey;
   explanation?: string;
+  optionExplanations?: Partial<Record<OptionKey, string>>;
 }
 
 export type PracticeQuestion =
