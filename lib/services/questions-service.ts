@@ -51,6 +51,7 @@ interface QuestionRow {
     fragments?: { text: string; underlined?: string }[];
     correction?: string;
     prompt?: string;
+    option_explanations?: Partial<Record<string, string>>;
   };
   correct: string;
   explanation: string | null;
